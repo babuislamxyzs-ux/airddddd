@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CryptoPro - Professional Airdrop Aggregator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; background-color: #0b0f1a; color: #e2e8f0; scroll-behavior: smooth; }
+        .gradient-bg { background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); }
+        .card-glow:hover { box-shadow: 0 0 20px rgba(56, 189, 248, 0.2); border-color: #38bdf8; }
+        .active-tab { border-bottom: 3px solid #38bdf8; color: #38bdf8; }
+        .modal { display: none; position: fixed; z-index: 100; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); }
+    </style>
+</head>
+<body>
+
+    <!-- Top Navbar -->
+    <nav class="sticky top-0 z-50 bg-[#0b0f1a]/80 backdrop-blur-md border-b border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center gap-2">
+                <div class="bg-blue-600 p-2 rounded-lg"><i class="fa-solid fa-rocket text-white"></i></div>
+                <span class="text-2xl font-bold tracking-tight text-white">Crypto<span class="text-blue-500">Pro</span></span>
+            </div>
+            <div class="hidden md:flex space-x-8 font-medium">
+                <a href="#" class="hover:text-blue-400">Airdrops</a>
+                <a href="#" class="hover:text-blue-400">Exchanges</a>
+                <a href="#" class="hover:text-blue-400">News</a>
+                <a href="#" class="hover:text-blue-400 text-yellow-500">🔥 Hot Deals</a>
+            </div>
+            <button class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-full font-bold transition">Connect Wallet</button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="relative py-20 px-4 overflow-hidden">
+        <div class="max-w-7xl mx-auto text-center relative z-10">
+            <h1 class="text-5xl md:text-7xl font-extrabold mb-6 leading-tight">
+                Get Verified <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500">Crypto Airdrops</span> <br> Before Everyone Else.
+            </h1>
+            <p class="text-slate-400 text-xl max-w-3xl mx-auto mb-10">
+                আমরা প্রতিদিন মার্কেট রিসার্চ করে সেরা এবং নিশ্চিত এয়ারড্রপগুলো লিস্ট করি। কোনো ফি ছাড়া আয় শুরু করুন আজই।
+            </p>
+            
+            <!-- Live Stats -->
+            <div class="flex flex-wrap justify-center gap-8 mb-12">
+                <div class="bg-slate-800/50 p-4 rounded-2xl min-w-[150px]">
+                    <div class="text-3xl font-bold text-blue-400">150+</div>
+                    <div class="text-sm text-slate-500 uppercase">Live Airdrops</div>
+                </div>
+                <div class="bg-slate-800/50 p-4 rounded-2xl min-w-[150px]">
+                    <div class="text-3xl font-bold text-green-400">$2.5M</div>
+                    <div class="text-sm text-slate-500 uppercase">Total Value</div>
+                </div>
+                <div class="bg-slate-800/50 p-4 rounded-2xl min-w-[150px]">
+                    <div class="text-3xl font-bold text-purple-400">50K+</div>
+                    <div class="text-sm text-slate-500 uppercase">Users Joined</div>
+                </div>
+            </div>
+        </div>
+        <!-- Background Decoration -->
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full opacity-20 pointer-events-none">
+            <div class="absolute top-10 left-10 w-72 h-72 bg-blue-600 rounded-full blur-[120px]"></div>
+            <div class="absolute bottom-10 right-10 w-72 h-72 bg-purple-600 rounded-full blur-[120px]"></div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <section class="max-w-7xl mx-auto px-4 py-10">
+        
+        <!-- Filter Tabs -->
+        <div class="flex overflow-x-auto border-b border-slate-800 mb-8 gap-8 no-scrollbar">
+            <button onclick="filterAirdrops('active')" id="tab-active" class="pb-4 font-bold active-tab">Active Airdrops</button>
+            <button onclick="filterAirdrops('upcoming')" id="tab-upcoming" class="pb-4 font-bold text-slate-500 hover:text-white">Upcoming</button>
+            <button onclick="filterAirdrops('potential')" id="tab-potential" class="pb-4 font-bold text-slate-500 hover:text-white">Potential/Speculative</button>
+            <button onclick="filterAirdrops('ended')" id="tab-ended" class="pb-4 font-bold text-slate-500 hover:text-white">Ended</button>
+        </div>
+
+        <!-- Airdrop Grid -->
+        <div id="airdropContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Items loaded via JS -->
+        </div>
+    </section>
+
+    <!-- Modal for Airdrop Details -->
+    <div id="detailsModal" class="modal flex items-center justify-center p-4">
+        <div class="bg-slate-900 w-full max-w-2xl rounded-3xl overflow-hidden border border-slate-700 relative">
+            <button onclick="closeModal()" class="absolute top-5 right-5 text-2xl text-slate-500 hover:text-white">&times;</button>
+            <div id="modalContent" class="p-8">
+                <!-- Data from JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Newsletter -->
+    <section class="max-w-5xl mx-auto px-4 py-20">
+        <div class="bg-gradient-to-r from-blue-600 to-indigo-700 rounded-3xl p-10 text-center">
+            <h2 class="text-3xl font-bold mb-4">Don't miss a single drop!</h2>
+            <p class="mb-8 opacity-90">আমাদের নিউজলেটারে সাবস্ক্রাইব করুন এবং ইমেইলে সরাসরি আপডেট পান।</p>
+            <div class="flex flex-col md:flex-row gap-4 max-w-md mx-auto">
+                <input type="email" placeholder="Enter your email" class="flex-1 px-6 py-3 rounded-xl bg-white text-black focus:outline-none">
+                <button class="bg-black text-white px-8 py-3 rounded-xl font-bold hover:bg-slate-800 transition">Subscribe</button>
+            </div>
+        </div>
+    </section>
+
+    <footer class="border-t border-slate-800 py-10 text-center text-slate-500">
+        <p>&copy; 2024 CryptoPro Global. All rights reserved.</p>
+        <div class="flex justify-center gap-6 mt-4 text-xl">
+            <a href="#"><i class="fa-brands fa-telegram hover:text-blue-400"></i></a>
+            <a href="#"><i class="fa-brands fa-twitter hover:text-blue-400"></i></a>
+            <a href="#"><i class="fa-brands fa-discord hover:text-blue-400"></i></a>
+        </div>
+    </footer>
+
+    <script>
+        // এয়ারড্রপ ডাটাবেজ
+        const airdropData = [
+            {
+                id: 1,
+                name: "Hamster Kombat",
+                logo: "https://cryptorank-images.s3.eu-central-1.amazonaws.com/coins/hamster_kombat1711984260027.png",
+                value: "$500+",
+                category: "active",
+                tags: ["Gaming", "Telegram"],
+                ref: "YOUR_LINK_1",
+                steps: ["Open Telegram Bot", "Start Tapping to earn coins", "Join Daily Combo", "Connect TON Wallet"]
+            },
+            {
+                id: 2,
+                name: "Blum Exchange",
+                logo: "https://pbs.twimg.com/profile_images/1781255554378944512/0T5M7H_d_400x400.jpg",
+                value: "High Potential",
+                category: "active",
+                tags: ["DeFi", "Exchange"],
+                ref: "YOUR_LINK_2",
+                steps: ["Join Blum bot", "Register with email", "Start farming every 8 hours", "Invite friends for more points"]
+            },
+            {
+                id: 3,
+                name: "Berachain",
+                logo: "https://pbs.twimg.com/profile_images/1750567702846836736/o9187H_M_400x400.jpg",
+                value: "$2000+",
+                category: "upcoming",
+                tags: ["L1 Blockchain"],
+                ref: "#",
+                steps: ["Add Berachain Testnet", "Get Faucet Tokens", "Swap on BEX", "Provide Liquidity"]
+            }
+        ];
+
+        const container = document.getElementById('airdropContainer');
+
+        function renderCards(filter = 'active') {
+            container.innerHTML = "";
+            const filtered = airdropData.filter(item => item.category === filter);
+            
+            if(filtered.length === 0) {
+                container.innerHTML = `<div class="col-span-full text-center py-20 text-slate-500 text-xl">No airdrops found in this category.</div>`;
+                return;
+            }
+
+            filtered.forEach(item => {
+                container.innerHTML += `
+                    <div class="bg-slate-900/50 border border-slate-800 rounded-3xl p-6 card-glow transition-all duration-300">
+                        <div class="flex justify-between items-start mb-6">
+                            <img src="${item.logo}" class="w-14 h-14 rounded-2xl shadow-lg">
+                            <span class="bg-blue-500/10 text-blue-400 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">${item.tags[0]}</span>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2">${item.name}</h3>
+                        <p class="text-slate-400 text-sm mb-4">বড় প্রজেক্ট, মিস করা ঠিক হবে না। নিচের বাটনে ক্লিক করে কাজগুলো দেখুন।</p>
+                        <div class="flex justify-between items-center py-4 border-t border-slate-800 mb-4">
+                            <span class="text-slate-500 text-sm font-medium">Potential Value</span>
+                            <span class="text-green-400 font-bold">${item.value}</span>
+                        </div>
+                        <div class="grid grid-cols-2 gap-3">
+                            <button onclick="openModal(${item.id})" class="bg-slate-800 hover:bg-slate-700 text-white font-bold py-3 rounded-xl transition">Details</button>
+                            <a href="${item.ref}" target="_blank" class="bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 rounded-xl text-center transition">Join Now</a>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function filterAirdrops(cat) {
+            // Update tabs UI
+            document.querySelectorAll('button[id^="tab-"]').forEach(btn => {
+                btn.classList.remove('active-tab');
+                btn.classList.add('text-slate-500');
+            });
+            document.getElementById('tab-' + cat).classList.add('active-tab');
+            document.getElementById('tab-' + cat).classList.remove('text-slate-500');
+            
+            renderCards(cat);
+        }
+
+        function openModal(id) {
+            const item = airdropData.find(a => a.id === id);
+            const modal = document.getElementById('detailsModal');
+            const content = document.getElementById('modalContent');
+            
+            content.innerHTML = `
+                <div class="flex items-center gap-4 mb-6">
+                    <img src="${item.logo}" class="w-16 h-16 rounded-2xl">
+                    <div>
+                        <h2 class="text-2xl font-bold">${item.name}</h2>
+                        <p class="text-blue-400">${item.tags.join(' • ')}</p>
+                    </div>
+                </div>
+                <h4 class="font-bold text-lg mb-4 text-white">How to participate:</h4>
+                <ul class="space-y-4">
+                    ${item.steps.map((step, index) => `
+                        <li class="flex gap-4 items-start">
+                            <span class="bg-blue-600 text-white w-6 h-6 rounded-full flex-shrink-0 flex items-center justify-center text-xs font-bold">${index + 1}</span>
+                            <span class="text-slate-300">${step}</span>
+                        </li>
+                    `).join('')}
+                </ul>
+                <div class="mt-8">
+                    <a href="${item.ref}" target="_blank" class="block w-full bg-blue-600 text-center py-4 rounded-2xl font-bold text-lg hover:bg-blue-500 transition">Complete All Tasks</a>
+                </div>
+            `;
+            
+            modal.style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('detailsModal').style.display = 'none';
+        }
+
+        // Initial Load
+        renderCards('active');
+    </script>
+</body>
+</html>
